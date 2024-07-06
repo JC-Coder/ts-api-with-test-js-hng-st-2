@@ -21,7 +21,7 @@ jobs:
           key: ${{secrets.SERVER_SSH_KEY}}
           username: ${{secrets.SERVER_USERNAME}}
           script: |
-            cd ogaticket-staging-api
+            cd stage-2-task-api
             git pull https://x-access-token:${{secrets.GITHUB_TOKEN}}@github.com/AJIS-GROUP/linx-api.git
             export APP_NAME="${{secrets.APP_NAME}}"
             export APP_PORT="${{secrets.APP_PORT}}"
