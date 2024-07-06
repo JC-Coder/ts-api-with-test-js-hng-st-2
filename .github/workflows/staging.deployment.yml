@@ -22,7 +22,7 @@ jobs:
           username: ${{secrets.SERVER_USERNAME}}
           script: |
             cd stage-2-task-api
-            git pull https://x-access-token:${{secrets.GITHUB_TOKEN}}@github.com/AJIS-GROUP/linx-api.git
+            git pull https://x-access-token:${{secrets.GITHUB_TOKEN}}@github.com/JC-Coder/ts-api-with-test-js-hng-st-2.git
             export APP_NAME="${{secrets.APP_NAME}}"
             export APP_PORT="${{secrets.APP_PORT}}"
             export APP_ENV="${{secrets.APP_ENV}}"
