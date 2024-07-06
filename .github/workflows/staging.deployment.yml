@@ -21,7 +21,7 @@ jobs:
           key: ${{secrets.SERVER_SSH_KEY}}
           username: ${{secrets.SERVER_USERNAME}}
           script: |
-            cd stage-2-task-api
+            cd ts-api-with-test-js-hng-st-2
             git pull https://x-access-token:${{secrets.GITHUB_TOKEN}}@github.com/JC-Coder/ts-api-with-test-js-hng-st-2.git
             export APP_NAME="${{secrets.APP_NAME}}"
             export APP_PORT="${{secrets.APP_PORT}}"
