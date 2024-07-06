@@ -1,59 +1,80 @@
-
----
-
 # NestJs Project
 
 [![StartEase](https://img.shields.io/badge/Generated%20by-StartEase-blue)](https://github.com/JC-Coder/startease)
 
-## Overview
+# User Authentication and Organization Management API
 
-Welcome to your project generated using StartEase! This guide will walk you through the basic configuration steps to get your backend project up and running.
+This project implements a RESTful API for user authentication and organization management using NestJS and PostgreSQL.
 
-## Prerequisites
+## Getting Started
 
-Before you begin, make sure you have the following prerequisites installed on your system:
-
-- Node.js and npm: Download and install Node.js from [nodejs.org](https://nodejs.org/).
-
-## Installation
-
-Install project dependencies using npm :
+1. Clone the repository
+2. Install Node.js (version 14 or later) if not already installed
+3. Install NestJS CLI globally:
+   ```bash
+   npm install -g @nestjs/cli
+   ```
+4. Install TypeScript globally (if not already installed):
+   ```bash
+   npm install -g typescript
+   ```
+5. Install project dependencies:
    ```bash
    npm install
    ```
-OR
+6. Set up your PostgreSQL database
+7. Configure your environment variables
+8. Start the server: `npm run start:dev`
 
-Install project dependencies using yarn :
-```bash
-yarn install
-```
+## Features
 
-## Configuration
+- User registration and authentication
+- JWT-based authentication
+- Organization creation and management
+- User-organization associations
+- Input validation and error handling
 
-### Environment Variables
+## API Endpoints
 
-Your project relies on environment variables for configuration. To set up these variables:
+### Authentication
 
-1. Create a `.env` file in the project root directory.
+- `POST /auth/register`: Register a new user and create a default organization
+- `POST /auth/login`: Log in a user
 
-2. Add the following environment variables to the `.env` file:
+### Users
 
-   ```plaintext
-   APP_NAME=YourAppName
-   APP_PORT=3000
-   APP_ENV=development
-   ```
-   Note: configuration variables should be added based on config in the environment.js file.
+- `GET /api/users/:id`: Get user details (protected)
 
+### Organizations
 
-Replace `YourAppName`, `your-database-url`, `your-database-name`, etc., with your actual project and database information.
+- `GET /api/organisations`: Get all organizations for the logged-in user (protected)
+- `GET /api/organisations/:orgId`: Get a single organization (protected)
+- `POST /api/organisations`: Create a new organization (protected)
+- `POST /api/organisations/:orgId/users`: Add a user to an organization (protected)
 
-### Start the Project
+## Technologies Used
 
-Once you've configured your environment variables, you can start your project:
+- NestJS
+- PostgreSQL
+- TypeORM
+- Passport JWT
+- Class Validator
 
-```bash
-npm run start:dev
-```
+## Testing
 
-Your backend server should now be running at http://localhost:<specified-port>.
+- Run unit tests: `npm run test`
+- Run e2e tests: `npm run test:e2e`
+
+## API Documentation
+
+For detailed API documentation, please refer to our Postman collection:
+
+[Postman Documentation URL](https://documenter.getpostman.com/view/24185831/2sA3e1AUq5)
+
+## Contributing
+
+Please read our contributing guidelines before submitting pull requests.
+
+## License
+
+This project is licensed under the MIT License.
