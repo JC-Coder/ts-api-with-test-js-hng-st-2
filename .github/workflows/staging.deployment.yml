@@ -4,60 +4,35 @@ on:
   push:
     branches:
       - dev
-env:
-  APP_ENCRYPTION_KEY: ${{secrets.APP_ENCRYPTION_KEY}}
-  APP_ENV: ${{secrets.APP_ENV}}
-  APP_PORT: ${{secrets.APP_PORT}}
-  APP_NAME: ${{secrets.APP_NAME}}
-  AUTH_EMAIL: ${{secrets.AUTH_EMAIL}}
-  AUTH_PASSWORD: ${{secrets.AUTH_PASSWORD}}
-  AWS_ACCESS_KEY: ${{secrets.AWS_ACCESS_KEY}}
-  AWS_BUCKET_NAME: ${{secrets.AWS_BUCKET_NAME}}
-  AWS_BUCKET_URL: ${{secrets.AWS_BUCKET_URL}}
-  AWS_REGION: ${{secrets.AWS_REGION}}
-  AWS_SECRET: ${{secrets.AWS_SECRET}}
-  DB_URL: ${{secrets.DB_URL}}
-  JWT_SECRET: ${{secrets.JWT_SECRET}}
-  FIREBASE_PROJECT_ID: ${{secrets.FIREBASE_PROJECT_ID}}
-  FIREBASE_PRIVATE_KEY: ${{secrets.FIREBASE_PRIVATE_KEY}}
-  FIREBASE_CLIENT_EMAIL: ${{secrets.FIREBASE_CLIENT_EMAIL}}
 
 jobs:
   deploy:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
       - name: Setup Node.js
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v4
         with:
-          node-version: '21.7.3'
+          node-version: '20'
 
-      - name: Install dependencies
-        run: yarn install
-
-      - name: Build
-        run: yarn build
-
-      - name: Add Env
-        run: |
-          export APP_ENCRYPTION_KEY=${{env.APP_ENCRYPTION_KEY}}
-          export APP_ENV=${{env.APP_ENV}}
-          export APP_PORT=${{env.APP_PORT}}
-          export APP_NAME=${{env.APP_NAME}}
-          export AUTH_EMAIL=${{env.AUTH_EMAIL}}
-          export AUTH_PASSWORD=${{env.AUTH_PASSWORD}}
-          export AWS_ACCESS_KEY=${{env.AWS_ACCESS_KEY}}
-          export AWS_BUCKET_NAME=${{env.AWS_BUCKET_NAME}}
-          export AWS_BUCKET_URL=${{env.AWS_BUCKET_URL}}
-          export AWS_REGION=${{env.AWS_REGION}}
-          export AWS_SECRET=${{env.AWS_SECRET}}
-          export DB_URL=${{env.DB_URL}}
-          export JWT_SECRET=${{env.JWT_SECRET}}
-          export FIREBASE_PROJECT_ID=${{env.FIREBASE_PROJECT_ID}}
-          export FIREBASE_PRIVATE_KEY=${{env.FIREBASE_PRIVATE_KEY}}
-          export FIREBASE_CLIENT_EMAIL=${{env.FIREBASE_CLIENT_EMAIL}}
-
-      - name: Start Or Restart Server
-        run: yarn start:prod
+      - name: Deploy to Staging Server
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{secrets.SERVER_HOST}}
+          key: ${{secrets.SERVER_SSH_KEY}}
+          username: ${{secrets.SERVER_USERNAME}}
+          script: |
+            cd ogaticket-staging-api
+            git pull https://x-access-token:${{secrets.GITHUB_TOKEN}}@github.com/AJIS-GROUP/linx-api.git
+            export APP_NAME="${{secrets.APP_NAME}}"
+            export APP_PORT="${{secrets.APP_PORT}}"
+            export APP_ENV="${{secrets.APP_ENV}}"
+            export JWT_SECRET="${{secrets.JWT_SECRET}}"
+            export DB_HOST="${{secrets.DB_HOST}}"
+            export DB_PORT="${{secrets.DB_PORT}}"
+            export DB_USERNAME="${{secrets.DB_USERNAME}}"
+            export DB_PASSWORD="${{secrets.DB_PASSWORD}}"
+            export DB_NAME="${{secrets.DB_NAME}}"
+            yarn
+            yarn build
+            yarn start:prod
+            echo "Deployment to Staging Server Completed"

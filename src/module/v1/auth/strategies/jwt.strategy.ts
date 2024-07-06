@@ -4,7 +4,7 @@ import { ExtractJwt, Strategy } from 'passport-jwt';
 
 import { Request } from 'express';
 import { ENVIRONMENT } from '../../../../common/configs/environment';
-import { UserService } from 'src/module/v1/user/user.service';
+import { UserService } from '../../user/user.service';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {

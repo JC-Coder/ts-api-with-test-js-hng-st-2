@@ -1,10 +1,10 @@
-import { BadRequestException, Injectable, UnauthorizedException } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { LoginDto } from './dto/auth.dto';
 import { BaseHelper } from '../../../common/utils/helper.util';
 import { JwtService } from '@nestjs/jwt';
-import { UserService } from 'src/module/v1/user/user.service';
 import { CreateUserDto } from 'src/module/v1/user/dto/user.dto';
 import { ISignJwtToken } from 'src/common/interfaces/auth.interface';
+import { UserService } from '../user/user.service';
 
 @Injectable()
 export class AuthService {
@@ -46,6 +46,6 @@ export class AuthService {
   async signJwtToken(payload: ISignJwtToken) {
     const { userId } = payload;
 
-    return await this.jwtService.signAsync({ userId });
+    return await this.jwtService.signAsync({ userId }, { expiresIn: '5d' });
   }
 }

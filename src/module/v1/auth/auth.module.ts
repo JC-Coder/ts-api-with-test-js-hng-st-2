@@ -6,14 +6,14 @@ import { ENVIRONMENT } from '../../../common/configs/environment';
 import { JwtAuthGuard } from './guards/jwt.guard';
 import { APP_GUARD } from '@nestjs/core';
 import { JwtStrategy } from './strategies/jwt.strategy';
-import { UserModule } from 'src/module/v1/user/user.module';
+import { UserModule } from '../user/user.module';
 
 @Module({
   imports: [
     {
       ...JwtModule.register({
         secret: ENVIRONMENT.JWT.SECRET,
-        signOptions: { expiresIn: '100d' },
+        signOptions: { expiresIn: '5d' },
       }),
       global: true,
     },

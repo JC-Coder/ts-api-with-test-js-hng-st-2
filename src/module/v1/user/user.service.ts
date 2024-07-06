@@ -1,9 +1,9 @@
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException, UnprocessableEntityException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { OrganisationService } from 'src/module/v1/organisation/organisation.service';
 import { CreateUserDto } from 'src/module/v1/user/dto/user.dto';
-import { User } from 'src/module/v1/user/entities/user.entity';
 import { Repository } from 'typeorm';
+import { OrganisationService } from '../organisation/organisation.service';
+import { User } from './entities/user.entity';
 
 @Injectable()
 export class UserService {
@@ -19,7 +19,7 @@ export class UserService {
     const userWithEmailExists = await this.userRepository.exists({ where: { email: email } });
 
     if (userWithEmailExists) {
-      throw new BadRequestException('Registration unsuccessful');
+      throw new UnprocessableEntityException('Registration unsuccessful');
     }
 
     const createdUser = await this.userRepository.save(this.userRepository.create(payload));

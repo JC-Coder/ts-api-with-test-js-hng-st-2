@@ -32,7 +32,7 @@ export class HttpExceptionFilter implements ExceptionFilter {
         status: 'Bad Request',
         ...(errorFieldCount ? { errors } : {}),
         message: Array.isArray(responseMsg.message) ? responseMsg.message[0] : message,
-        statusCode: status,
+        statusCode: errorFieldCount ? 422 : status,
       });
     } else {
       response.status(status).json({

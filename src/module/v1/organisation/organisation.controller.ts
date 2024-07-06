@@ -1,10 +1,10 @@
-import { BadRequestException, Body, Controller, Get, Param, Post, Res } from '@nestjs/common';
+import { BadRequestException, Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { OrganisationService } from './organisation.service';
-import { LoggedInUserDecorator } from 'src/common/decorators/logged_in_user.decorator';
-import { User } from 'src/module/v1/user/entities/user.entity';
-import { AddUserToOrganisationDto, CreateOrganisationDto } from 'src/module/v1/organisation/dtos/organisation.dto';
-import { ResponseMessage } from 'src/common/decorators/response.decorator';
-import { RESPONSE_CONSTANT } from 'src/common/constants/response.constant';
+import { RESPONSE_CONSTANT } from '../../../common/constants/response.constant';
+import { LoggedInUserDecorator } from '../../../common/decorators/logged_in_user.decorator';
+import { ResponseMessage } from '../../../common/decorators/response.decorator';
+import { User } from '../user/entities/user.entity';
+import { CreateOrganisationDto, AddUserToOrganisationDto } from './dtos/organisation.dto';
 
 @Controller('organisations')
 export class OrganisationController {
@@ -28,8 +28,8 @@ export class OrganisationController {
   }
 
   @Get(':orgId')
-  async getOrganisationById(@Param('orgId') id: string) {
-    return await this.organisationService.getOrganisationById(id);
+  async getOrganisationById(@Param('orgId') id: string, @LoggedInUserDecorator() user: User) {
+    return await this.organisationService.getOrganisationById(id, user);
   }
 
   @ResponseMessage(RESPONSE_CONSTANT.ORG.ADD_USER_SUCCESS)

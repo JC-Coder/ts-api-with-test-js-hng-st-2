@@ -1,10 +1,15 @@
 import { BadRequestException, Inject, Injectable, NotFoundException, forwardRef } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { AddUserToOrganisationDto, CreateOrganisationDto } from 'src/module/v1/organisation/dtos/organisation.dto';
-import { Organisation } from 'src/module/v1/organisation/entities/organisation.entity';
-import { User } from 'src/module/v1/user/entities/user.entity';
-import { UserService } from 'src/module/v1/user/user.service';
 import { Repository } from 'typeorm';
+import { User } from '../user/entities/user.entity';
+import { UserService } from '../user/user.service';
+import { CreateOrganisationDto, AddUserToOrganisationDto } from './dtos/organisation.dto';
+import { Organisation } from './entities/organisation.entity';
+// import { AddUserToOrganisationDto, CreateOrganisationDto } from 'src/module/v1/organisation/dtos/organisation.dto';
+// import { Organisation } from 'src/module/v1/organisation/entities/organisation.entity';
+// import { User } from 'src/module/v1/user/entities/user.entity';
+// import { UserService } from 'src/module/v1/user/user.service';
+// import { Repository } from 'typeorm';
 
 @Injectable()
 export class OrganisationService {
@@ -25,8 +30,18 @@ export class OrganisationService {
     return createdOrg;
   }
 
-  async getOrganisationById(id: string) {
-    const organisation = await this.organisationRepository.findOne({ where: { orgId: id } });
+  async getOrganisationById(orgId: string, user: User) {
+    const organisation = await this.organisationRepository
+      .createQueryBuilder('organisation')
+      .leftJoinAndSelect('organisation.users', 'user')
+      .where('user.userId = :userId', { userId: user.userId })
+      .andWhere('organisation.orgId = :orgId', { orgId })
+      .select(['organisation.orgId', 'organisation.name', 'organisation.description'])
+      .getOne();
+
+    if (!organisation) {
+      throw new NotFoundException('Organisation not found');
+    }
 
     return organisation;
   }

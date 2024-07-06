@@ -1,6 +1,6 @@
-import { BaseHelper } from 'src/common/utils/helper.util';
-import { Organisation } from 'src/module/v1/organisation/entities/organisation.entity';
 import { BeforeInsert, Column, Entity, JoinTable, ManyToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { BaseHelper } from '../../../../common/utils/helper.util';
+import { Organisation } from '../../organisation/entities/organisation.entity';
 
 @Entity()
 export class User {
